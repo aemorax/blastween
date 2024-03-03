@@ -1,0 +1,7 @@
+--library tink_unittest
+--class-path src
+--class-path tests
+--main RunTests
+--dce full
+--define no-deprecation-warnings
+--neko out/tests.n
