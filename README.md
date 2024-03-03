@@ -28,5 +28,6 @@ class Main {
 		// point.x == 2.5 point.y == 0.5
 	}
 }
+```
 
-** Please Note: `from` properties of a `Float` should always be `Float` constant. **
+**Please Note: `from` properties of a `Float` should always be `Float` constant.**
