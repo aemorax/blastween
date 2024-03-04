@@ -1,6 +1,6 @@
 ![Branding](./extra/branding.png)
 -----
-
+[![Building And Testing](https://github.com/nevergarden/blastween/actions/workflows/main.yml/badge.svg)](https://github.com/nevergarden/blastween/actions/workflows/main.yml)  
 Simple tweening system for general purpose usage, using `Reflection` API can change the objects and their data easier.
 
 ### Example
