@@ -4,4 +4,10 @@
 --main RunTests
 --dce full
 --define no-deprecation-warnings
+--each
+
+--next
 --neko out/tests.n
+
+--next
+--hl out/tests.hl

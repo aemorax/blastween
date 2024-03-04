@@ -166,16 +166,19 @@ class TweenObject implements IUpdater {
 			var lastProp:Dynamic = this.object;
 			for (p in 0...prop.length - 1) {
 				var x = prop[p];
-				trace(Type.typeof(x));
 				lastProp = Reflect.getProperty(lastProp, x);
 			}
 
+			#if hl
+			Reflect.setProperty(lastProp, prop[prop.length - 1], cast(current, Float));
+			#else
 			var fromType:Type.ValueType = Type.typeof(from);
 			if (fromType == TInt) {
 				Reflect.setProperty(lastProp, prop[prop.length - 1], cast Std.int(current));
-				} else {
+			} else {
 				Reflect.setProperty(lastProp, prop[prop.length - 1], cast current);
 			}
+			#end
 		} else {
 			var fromFields = Reflect.fields(from);
 			var toFields = Reflect.fields(to);

@@ -1,5 +1,6 @@
 package;
 
+import blastween.Easing;
 import tink.testrunner.Assertion;
 import tink.testrunner.Assertions;
 import tink.core.Error;
@@ -20,8 +21,8 @@ typedef TweenTestType = {
 }
 
 class TweenTestClass {
-	public var integer : Int;
-	public var float : Float;
+	public var integer:Int;
+	public var float:Float;
 
 	public function new(integer:Int, float:Float) {
 		this.integer = integer;
@@ -33,7 +34,7 @@ class TweenTestClass {
 class TestLinear {
 	private var updateManager:UpdateManager;
 	private var typeTweenData:TweenTestType;
-	private var	classTweenData:TweenTestClass;
+	private var classTweenData:TweenTestClass;
 	private var typeTweenObject:TweenObject;
 
 	public function new() {
@@ -103,9 +104,63 @@ class TestLinear {
 	}
 }
 
+@:await
+class TestEasing {
+	private var updateManager:UpdateManager;
+	private var typeTweenData:TweenTestType;
+	private var classTweenData:TweenTestClass;
+	private var typeTweenObject:TweenObject;
+
+	public function new() {
+		this.updateManager = new UpdateManager();
+	}
+
+	@:setup
+	public function setup():Noise {
+		this.typeTweenData = {
+			integer: 0,
+			float: 0,
+		};
+		this.classTweenData = new TweenTestClass(0, 0);
+		return Noise;
+	}
+
+	@:describe("Tween with quad easing.")
+	public function quadTween():Assertions {
+		this.typeTweenObject = Blastween.tween(this.updateManager, classTweenData, {integer: 0, float: 0.0}, {integer: 10, float: 10.0}, 5.0)
+			.setEase(Easing.QUAD_IN)
+			.start();
+		var assertions:Array<Assertion> = [];
+		try {
+			updateManager.updateAll(0.4);
+			assertions.push(Assert.assert(classTweenData.integer == 0));
+			assertions.push(Assert.assert(classTweenData.float == 0.064));
+
+			updateManager.updateAll(0.6);
+			assertions.push(Assert.assert(classTweenData.integer == 0));
+			assertions.push(Assert.assert(Std.int(classTweenData.float * 10) == 4));
+
+			updateManager.updateAll(2.0);
+			assertions.push(Assert.assert(classTweenData.integer == 3));
+			assertions.push(Assert.assert(Std.int(classTweenData.float * 10) == 36));
+
+			updateManager.updateAll(2.0);
+			assertions.push(Assert.assert(classTweenData.integer == 10));
+			assertions.push(Assert.assert(classTweenData.float == 10.0));
+
+			updateManager.updateAll(1.0);
+			assertions.push(Assert.assert(classTweenData.integer == 10));
+			assertions.push(Assert.assert(classTweenData.float == 10.0));
+		} catch (e:Exception) {
+			return Assert.fail(new Error(InternalError, e.message));
+		}
+		return assertions;
+	}
+}
+
 class RunTests {
 	public static function main() {
-		var testBatch:tink.testrunner.Batch = TestBatch.make([new TestLinear()]);
+		var testBatch:tink.testrunner.Batch = TestBatch.make([new TestLinear(), new TestEasing()]);
 
 		Runner.run(testBatch).handle(tink.testrunner.Runner.exit);
 	}
