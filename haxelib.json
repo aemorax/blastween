@@ -1,7 +1,7 @@
 {
   "name": "blastween",
   "url": "https://github.com/nevergarden/blastween",
-	"tags": ["tweening", "animation", "tween"]
+	"tags": ["tweening", "animation", "tween"],
   "license": "MIT",
   "description": "Simple tweening system.",
   "version": "1.0.0",
