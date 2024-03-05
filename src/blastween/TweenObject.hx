@@ -1,12 +1,11 @@
 package blastween;
 
-import haxe.rtti.Rtti;
-
 class TweenObject implements IUpdater {
 	private final object:Dynamic;
-	private final updateManager:UpdateManager;
+	private final updateManager:Null<UpdateManager>;
 	private final updateMap:Map<String, Tuple<Dynamic, Dynamic>>;
 
+	private var isStarted:Bool = false;
 	private var isPause:Bool = true;
 	private var isLoop:Bool = false;
 	private var isPingPong:Bool = false;
@@ -19,7 +18,7 @@ class TweenObject implements IUpdater {
 	private var duration:Float = 0;
 	private var forward:Bool = true;
 
-	public function new(updater:UpdateManager, object:Dynamic, updateMap:Map<String, Tuple<Dynamic, Dynamic>>, duration:Float) {
+	public function new(object:Dynamic, updateMap:Map<String, Tuple<Dynamic, Dynamic>>, duration:Float, ?updater:UpdateManager = null) {
 		this.object = object;
 		this.updateMap = updateMap;
 		this.duration = duration;
@@ -38,27 +37,38 @@ class TweenObject implements IUpdater {
 
 	public function start():TweenObject {
 		this.onStart();
-		this.updateManager.addUpdater(this);
+		if (this.updateManager != null) {
+			this.updateManager.addUpdater(this);
+		}
+		this.isStarted = true;
 		return this;
 	}
 
 	public function cancel():TweenObject {
 		this.onCancel();
-		this.updateManager.removeUpdater(this);
+		if (this.updateManager != null) {
+			this.updateManager.removeUpdater(this);
+		}
 		this.time = 0;
 		this.delayRemain = 0;
+		this.isStarted = false;
 		return this;
 	}
 
 	public function pause():TweenObject {
 		this.isPause = true;
 		this.onPause();
-		this.updateManager.removeUpdater(this);
+		if (this.updateManager != null) {
+			this.updateManager.removeUpdater(this);
+		}
 		return this;
 	}
 
 	public function resume():TweenObject {
 		this.isPause = false;
+		if (this.updateManager != null) {
+			this.updateManager.addUpdater(this);
+		}
 		return this;
 	}
 
@@ -116,6 +126,10 @@ class TweenObject implements IUpdater {
 	}
 
 	public function update(dt:Float):Void {
+		if (!this.isStarted) {
+			return;
+		}
+
 		if (delayRemain < delay) {
 			delayRemain += dt;
 			return;

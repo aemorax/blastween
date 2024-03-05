@@ -32,14 +32,11 @@ class TweenTestClass {
 
 @:await
 class TestLinear {
-	private var updateManager:UpdateManager;
 	private var typeTweenData:TweenTestType;
 	private var classTweenData:TweenTestClass;
 	private var typeTweenObject:TweenObject;
 
-	public function new() {
-		this.updateManager = new UpdateManager();
-	}
+	public function new() {}
 
 	@:setup
 	public function setup():Noise {
@@ -53,22 +50,22 @@ class TestLinear {
 
 	@:describe("Test type data change.")
 	public function testTypeUpdate():Assertions {
-		this.typeTweenObject = Blastween.tween(this.updateManager, typeTweenData, {integer: 0, float: 0.0}, {integer: 1, float: 1.0}, 2.0).start();
+		this.typeTweenObject = Blastween.tween(typeTweenData, {integer: 0, float: 0.0}, {integer: 1, float: 1.0}, 2.0).start();
 		var assertions:Array<Assertion> = [];
 		try {
-			updateManager.updateAll(0.4);
+			this.typeTweenObject.update(0.4);
 			assertions.push(Assert.assert(typeTweenData.integer == 0));
 			assertions.push(Assert.assert(typeTweenData.float == 0.2));
 
-			updateManager.updateAll(0.6);
+			this.typeTweenObject.update(0.6);
 			assertions.push(Assert.assert(typeTweenData.integer == 0));
 			assertions.push(Assert.assert(typeTweenData.float == 0.5));
 
-			updateManager.updateAll(1.0);
+			this.typeTweenObject.update(1.0);
 			assertions.push(Assert.assert(typeTweenData.integer == 1));
 			assertions.push(Assert.assert(typeTweenData.float == 1.0));
 
-			updateManager.updateAll(1.0);
+			this.typeTweenObject.update(1.0);
 			assertions.push(Assert.assert(typeTweenData.integer == 1));
 			assertions.push(Assert.assert(typeTweenData.float == 1.0));
 		} catch (e:Exception) {
@@ -79,22 +76,22 @@ class TestLinear {
 
 	@:describe("Test class data change.")
 	public function testClassUpdate():Assertions {
-		this.typeTweenObject = Blastween.tween(this.updateManager, classTweenData, {integer: 0, float: 0.0}, {integer: 1, float: 1.0}, 2.0).start();
+		this.typeTweenObject = Blastween.tween(classTweenData, {integer: 0, float: 0.0}, {integer: 1, float: 1.0}, 2.0).start();
 		var assertions:Array<Assertion> = [];
 		try {
-			updateManager.updateAll(0.4);
+			this.typeTweenObject.update(0.4);
 			assertions.push(Assert.assert(classTweenData.integer == 0));
 			assertions.push(Assert.assert(classTweenData.float == 0.2));
 
-			updateManager.updateAll(0.6);
+			this.typeTweenObject.update(0.6);
 			assertions.push(Assert.assert(classTweenData.integer == 0));
 			assertions.push(Assert.assert(classTweenData.float == 0.5));
 
-			updateManager.updateAll(1.0);
+			this.typeTweenObject.update(1.0);
 			assertions.push(Assert.assert(classTweenData.integer == 1));
 			assertions.push(Assert.assert(classTweenData.float == 1.0));
 
-			updateManager.updateAll(1.0);
+			this.typeTweenObject.update(1.0);
 			assertions.push(Assert.assert(classTweenData.integer == 1));
 			assertions.push(Assert.assert(classTweenData.float == 1.0));
 		} catch (e:Exception) {
@@ -106,14 +103,11 @@ class TestLinear {
 
 @:await
 class TestEasing {
-	private var updateManager:UpdateManager;
 	private var typeTweenData:TweenTestType;
 	private var classTweenData:TweenTestClass;
 	private var typeTweenObject:TweenObject;
 
-	public function new() {
-		this.updateManager = new UpdateManager();
-	}
+	public function new() {}
 
 	@:setup
 	public function setup():Noise {
@@ -127,28 +121,26 @@ class TestEasing {
 
 	@:describe("Tween with quad easing.")
 	public function quadTween():Assertions {
-		this.typeTweenObject = Blastween.tween(this.updateManager, classTweenData, {integer: 0, float: 0.0}, {integer: 10, float: 10.0}, 5.0)
-			.setEase(Easing.QUAD_IN)
-			.start();
+		this.typeTweenObject = Blastween.tween(classTweenData, {integer: 0, float: 0.0}, {integer: 10, float: 10.0}, 5.0).setEase(Easing.QUAD_IN).start();
 		var assertions:Array<Assertion> = [];
 		try {
-			updateManager.updateAll(0.4);
+			this.typeTweenObject.update(0.4);
 			assertions.push(Assert.assert(classTweenData.integer == 0));
 			assertions.push(Assert.assert(classTweenData.float == 0.064));
 
-			updateManager.updateAll(0.6);
+			this.typeTweenObject.update(0.6);
 			assertions.push(Assert.assert(classTweenData.integer == 0));
 			assertions.push(Assert.assert(Std.int(classTweenData.float * 10) == 4));
 
-			updateManager.updateAll(2.0);
+			this.typeTweenObject.update(2.0);
 			assertions.push(Assert.assert(classTweenData.integer == 3));
 			assertions.push(Assert.assert(Std.int(classTweenData.float * 10) == 36));
 
-			updateManager.updateAll(2.0);
+			this.typeTweenObject.update(2.0);
 			assertions.push(Assert.assert(classTweenData.integer == 10));
 			assertions.push(Assert.assert(classTweenData.float == 10.0));
 
-			updateManager.updateAll(1.0);
+			this.typeTweenObject.update(1.0);
 			assertions.push(Assert.assert(classTweenData.integer == 10));
 			assertions.push(Assert.assert(classTweenData.float == 10.0));
 		} catch (e:Exception) {

@@ -1,7 +1,7 @@
 package blastween;
 
 class Blastween {
-	public static function tween(updater:UpdateManager, object:Dynamic, from:Dynamic, to:Dynamic, duration:Float):TweenObject {
+	public static function tween(object:Dynamic, from:Dynamic, to:Dynamic, duration:Float, ?updater:UpdateManager=null) :TweenObject {
 		var objFields = Reflect.fields(object);
 		var fromFields = Reflect.fields(from);
 		var toFields = Reflect.fields(to);
@@ -19,6 +19,6 @@ class Blastween {
 			updateMap.set(field, new Tuple(from, to));
 		}
 
-		return new TweenObject(updater, object, updateMap, duration);
+		return new TweenObject(object, updateMap, duration, updater);
 	}
 }
